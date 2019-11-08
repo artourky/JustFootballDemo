@@ -8,6 +8,7 @@ public abstract class UIController<M> where M : UIModel
     public virtual void Setup(M model)
     {
         Model = model;
+        Model.NotifyOnPropertyChanged();
     }
     protected virtual void Close()
     {
