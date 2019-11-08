@@ -83,7 +83,7 @@ public class ApiManager : MonoBehaviour
 
     public void SetClub(Club club, Action onComplete = null)
     {
-        StartCoroutine(SetClub(club.club, onComplete));
+        StartCoroutine(SetClub(club.ToJson(), onComplete));
     }
 
     public void GetClubs(Club club, Action onComplete = null)
@@ -94,6 +94,11 @@ public class ApiManager : MonoBehaviour
     public void GetCardss(Action onComplete = null)
     {
         StartCoroutine(GetCards(onComplete));
+    }
+
+    public void UpdUsrLocation(LocationData locInfo, Action onComplete = null)
+    {
+        StartCoroutine(UpdUserLocation(JsonUtility.ToJson(locInfo), onComplete));
     }
 
     private IEnumerator GetUser(string userId = "", Action onComplete = null)
@@ -131,12 +136,30 @@ public class ApiManager : MonoBehaviour
 
     private IEnumerator SetClub(string clubId, Action onComplete = null)
     {
-        yield return null;
+        StringBuilder url = new StringBuilder();
+        url.Append(_apiUrl).Append(_setClubUrl);
+
+        request = new UnityWebRequest(url.ToString(), "POST");
+        SetRequestInfo(clubId);
+
+        yield return request.SendWebRequest();
+        Log(request.downloadHandler.text);
+
+        onComplete?.Invoke();
     }
 
-    private IEnumerator UpdUserLocation(string newUserName, Action onComplete = null)
+    private IEnumerator UpdUserLocation(string locJson, Action onComplete = null)
     {
-        yield return null;
+        StringBuilder url = new StringBuilder();
+        url.Append(_apiUrl).Append(_setUsrLocUrl);
+
+        request = new UnityWebRequest(url.ToString(), "POST");
+        SetRequestInfo(locJson);
+
+        yield return request.SendWebRequest();
+        Log(request.downloadHandler.text);
+
+        onComplete?.Invoke();
     }
 
     private IEnumerator GetCards(Action onComplete = null)
