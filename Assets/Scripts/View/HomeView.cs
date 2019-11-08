@@ -13,4 +13,9 @@ public class HomeView : UIView<HomeModel, HomeController>
         Model.ListenOnPropertyChanged("playerName", () => { playerName.text = Model.playerName; });
         Model.ListenOnPropertyChanged("playerImage", () => { playerImage.sprite = Model.playerImage; });
     }
+
+    public void OnClubClick()
+    {
+        Controller.OpenClubView();
+    }
 }

@@ -27,7 +27,7 @@ public abstract class UIView : MonoBehaviour
     }
     public virtual void CloseView()
     {
-        Destroy(gameObject);
+        ViewsManager.Instance.CloseViewOnTopOfStack();
     }
 }
 public abstract class UIView<M, C> : UIView
