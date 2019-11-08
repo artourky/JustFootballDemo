@@ -25,6 +25,8 @@ public class ApiManager : MonoBehaviour
     public static ApiManager Instance;
     public bool IsNewUser = true;
 
+    public static bool IsReady;
+
     private void Awake()
     {
         Instance = this;
@@ -50,9 +52,9 @@ public class ApiManager : MonoBehaviour
 
         yield return request.SendWebRequest();
 
+        IsReady = request.responseCode == 200L;
         _authToken = request.downloadHandler.text;
-        Log("Response Code: " + request.responseCode);
-        Log(request.downloadHandler.text);
+        Log("ApiManager is ready? " + IsReady);
     }
 
     private void SetRequestInfo(string jsonBody = "")
@@ -76,7 +78,7 @@ public class ApiManager : MonoBehaviour
 
     public void SetUserName(UserName userName, Action onComplete = null)
     {
-        StartCoroutine(SetUserName(userName.username, onComplete));
+        StartCoroutine(SetUserName(userName.ToJson(), onComplete));
     }
 
     public void SetClub(Club club, Action onComplete = null)
@@ -87,6 +89,11 @@ public class ApiManager : MonoBehaviour
     public void GetClubs(Club club, Action onComplete = null)
     {
         StartCoroutine(GetClubs(club.club, onComplete));
+    }
+
+    public void GetCardss(Action onComplete = null)
+    {
+        StartCoroutine(GetCards(onComplete));
     }
 
     private IEnumerator GetUser(string userId = "", Action onComplete = null)
@@ -105,11 +112,21 @@ public class ApiManager : MonoBehaviour
 
         onComplete?.Invoke();
         Log(request.downloadHandler.text);
+        var usr = JsonUtility.FromJson<UserData>(request.downloadHandler.text);
+        Log(usr.ToString());
     }
 
     private IEnumerator SetUserName(string newUserName, Action onComplete = null)
     {
-        yield return null;
+        StringBuilder url = new StringBuilder();
+        url.Append(_apiUrl).Append(_setUsrNameUrl);
+
+        request = new UnityWebRequest(url.ToString(), "POST");
+        SetRequestInfo(newUserName);
+        yield return request.SendWebRequest();
+        Log(request.downloadHandler.text);
+
+        onComplete?.Invoke();
     }
 
     private IEnumerator SetClub(string clubId, Action onComplete = null)
@@ -124,7 +141,18 @@ public class ApiManager : MonoBehaviour
 
     private IEnumerator GetCards(Action onComplete = null)
     {
-        yield return null;
+        StringBuilder url = new StringBuilder();
+        url.Append(_apiUrl).Append(_cardsUrl);
+        request = new UnityWebRequest(url.ToString(), "GET");
+        SetRequestInfo();
+
+        yield return request.SendWebRequest();
+
+        onComplete?.Invoke();
+
+        url = new StringBuilder();
+        url.Append(request.downloadHandler.text).Insert(0, "{\"cards\":").Append('}');
+        var cards = JsonUtility.FromJson<CardsData>(url.ToString());
     }
 
     private IEnumerator GetClubs(string clubId = "", Action onComplete = null)
