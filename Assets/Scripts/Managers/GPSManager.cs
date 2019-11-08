@@ -3,26 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum LocationState
+{
+    Disabled,
+    TimedOut,
+    Failed,
+    Enabled
+}
+
 public class GPSManager : MonoBehaviour
 {
-    public static GPSManager instance;
+    public static GPSManager Instance;
     public LocationInfo LastData;
-    
-    void Start()
+    private const float EarthRadius = 6371;
+    private LocationState _state;
+
+    private void Start()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(this);
         }
 
-        StartCoroutine(InitalizeGPSService());
+        StartCoroutine(InitalizeGpsService());
     }
 
-    private IEnumerator InitalizeGPSService()
+    private IEnumerator InitalizeGpsService()
     {
-        if (!Input.location.isEnabledByUser)
+        if( !Input.location.isEnabledByUser )
+        {
             yield break;
+        }
 
         Input.location.Start();
 
@@ -36,24 +48,60 @@ public class GPSManager : MonoBehaviour
         if (maxWait < 1)
         {
             print("Timed out");
+            _state = LocationState.TimedOut;
             yield break;
         }
 
         if (Input.location.status == LocationServiceStatus.Failed)
         {
             print("Unable to determine device location");
-            yield break;
+            _state = LocationState.Failed;
         }
         else
         {
+            _state = LocationState.Enabled;
             LastData = Input.location.lastData;
         }
     }
 
 
     //get delta movement
-    private float Haversine()
+    private static float Haversine(float lastLatitude, float lastLongitude)
     {
-        return 0;
+        var newLatitude = Input.location.lastData.latitude;
+        var newLongitude = Input.location.lastData.longitude;
+        var deltaLatitude = ( newLatitude - lastLatitude ) * Mathf.Deg2Rad;
+        var deltaLongitude = ( newLongitude - lastLongitude ) * Mathf.Deg2Rad;
+        var a = Mathf.Pow( Mathf.Sin( deltaLatitude / 2 ), 2 ) +
+            Mathf.Cos( lastLatitude * Mathf.Deg2Rad ) *
+            Mathf.Cos( newLatitude * Mathf.Deg2Rad ) *
+            Mathf.Pow( Mathf.Sin( deltaLongitude / 2 ), 2 );
+        var c = 2 * Mathf.Atan2( Mathf.Sqrt( a ), Mathf.Sqrt( 1 - a ) );
+        return EarthRadius * c;
+    }
+
+    private void Update()
+    {
+        if( _state != LocationState.Enabled )
+        {
+            return;
+        }
+
+        var deltaDistance = Haversine(LastData.latitude, LastData.longitude) * 1000f;
+
+        if( !( deltaDistance > 0f ) )
+        {
+            return;
+        }
+
+        LastData = Input.location.lastData;
+
+        var newLocation = new LocationData
+        {
+            lat = LastData.latitude,
+            lng = LastData.longitude
+        };
+
+        ApiManager.Instance.UpdUsrLocation(newLocation);
     }
 }
