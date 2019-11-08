@@ -6,5 +6,5 @@ using UnityEngine;
 public class HomeModel : UIModel
 {
     public string playerName;
-    public string playerImage;
+    public Sprite playerImage;
 }

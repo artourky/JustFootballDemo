@@ -6,13 +6,11 @@ using UnityEngine.UI;
 public class HomeView : UIView<HomeModel, HomeController>
 {
     public Text playerName;
-    public Image PlayerIcon;
-
-    public override void SetupView()
+    public Image playerImage;
+    public override void RegisterDependency()
     {
-        base.SetupView();
-        playerName.text = Model.playerName;
-        PlayerIcon.sprite = Controller.getPlayerSprite();
+        base.RegisterDependency();
+        Model.ListenOnPropertyChanged("playerName", () => { playerName.text = Model.playerName; });
+        Model.ListenOnPropertyChanged("playerImage", () => { playerImage.sprite = Model.playerImage; });
     }
-
 }
