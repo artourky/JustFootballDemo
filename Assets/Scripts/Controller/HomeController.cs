@@ -7,6 +7,10 @@ public class HomeController : UIController<HomeModel>
     protected override void Close()
     {
         base.Close();
+    }
 
+    public void OpenClubView()
+    {
+        ViewsManager.Instance.OpenView(ViewType.ClubsView);
     }
 }
