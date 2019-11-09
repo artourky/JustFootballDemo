@@ -27,7 +27,7 @@ public class ApiCallingTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C) && ApiManager.IsReady)
         {
             //var club = new Club("");
-            ApiManager.Instance.GetCardss(() => Log("cardss done"));
+            ApiManager.Instance.GetCardss((cards) => Log("cardss done"));
         }
 
         if (Input.GetKeyDown(KeyCode.Q) && ApiManager.IsReady)

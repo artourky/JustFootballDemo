@@ -11,7 +11,7 @@ public class ClubsModel : UIModel
 
     public void RequestClubs()
     {
-        ApiManager.Instance.GetClubs(OnGetClubsComplete);
+        ApiManager.Instance.GetClubs(null,OnGetClubsComplete);
     }
     private void OnGetClubsComplete(ClubsData.ClubData[] clubsData)
     {

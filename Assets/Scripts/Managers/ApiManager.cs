@@ -86,12 +86,13 @@ public class ApiManager : MonoBehaviour
         StartCoroutine(SetClub(club.ToJson(), onComplete));
     }
 
-    public void GetClubs(Club club, Action onComplete = null)
+    public void GetClubs(Club club = null, Action<ClubsData.ClubData[]> onComplete = null)
     {
-        StartCoroutine(GetClubs(club.club, onComplete));
+        string clubName = club != null ? club.club : "" ;
+        StartCoroutine(GetClubs(clubName, onComplete));
     }
 
-    public void GetCardss(Action onComplete = null)
+    public void GetCardss(Action<CardsData.CardData[]> onComplete = null)
     {
         StartCoroutine(GetCards(onComplete));
     }
@@ -162,7 +163,7 @@ public class ApiManager : MonoBehaviour
         onComplete?.Invoke();
     }
 
-    private IEnumerator GetCards(Action onComplete = null)
+    private IEnumerator GetCards(Action<CardsData.CardData[]> onComplete = null)
     {
         StringBuilder url = new StringBuilder();
         url.Append(_apiUrl).Append(_cardsUrl);
@@ -171,14 +172,13 @@ public class ApiManager : MonoBehaviour
 
         yield return request.SendWebRequest();
 
-        onComplete?.Invoke();
-
         url = new StringBuilder();
         url.Append(request.downloadHandler.text).Insert(0, "{\"cards\":").Append('}');
         var cards = JsonUtility.FromJson<CardsData>(url.ToString());
+        onComplete?.Invoke(cards.cards);
     }
 
-    private IEnumerator GetClubs(string clubId = "", Action onComplete = null)
+    private IEnumerator GetClubs(string clubId = "", Action<ClubsData.ClubData[]> onComplete = null)
     {
         StringBuilder url = new StringBuilder();
         if (!string.IsNullOrEmpty(clubId))
@@ -191,8 +191,10 @@ public class ApiManager : MonoBehaviour
         SetRequestInfo();
 
         yield return request.SendWebRequest();
-
-        onComplete?.Invoke();
+        url = new StringBuilder();
+        url.Append(request.downloadHandler.text).Insert(0, "{\"clubs\":").Append('}');
+        var clubs = JsonUtility.FromJson<ClubsData>(url.ToString());
+        onComplete?.Invoke(clubs.clubs);
         Log(request.downloadHandler.text);
     }
 
