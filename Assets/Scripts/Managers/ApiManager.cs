@@ -70,9 +70,10 @@ public class ApiManager : MonoBehaviour
         }
     }
 
-    public void GetUser(UserName userName, Action onComplete = null)
+    public void GetUser(UserName userName = null, Action<UserData> onComplete = null)
     {
-        StartCoroutine(GetUser(userName.username, onComplete));
+        string playerName = userName != null ? userName.username : "";
+        StartCoroutine(GetUser(playerName, onComplete));
     }
 
     public void SetUserName(UserName userName, Action onComplete = null)
@@ -101,7 +102,7 @@ public class ApiManager : MonoBehaviour
         StartCoroutine(UpdUserLocation(JsonUtility.ToJson(locInfo), onComplete));
     }
 
-    private IEnumerator GetUser(string userId = "", Action onComplete = null)
+    private IEnumerator GetUser(string userId = "", Action<UserData> onComplete = null)
     {
         StringBuilder url = new StringBuilder();
         if (!string.IsNullOrEmpty(userId))
@@ -115,9 +116,9 @@ public class ApiManager : MonoBehaviour
 
         yield return request.SendWebRequest();
 
-        onComplete?.Invoke();
         Log(request.downloadHandler.text);
         var usr = JsonUtility.FromJson<UserData>(request.downloadHandler.text);
+        onComplete?.Invoke(usr);
         Log(usr.ToString());
     }
 

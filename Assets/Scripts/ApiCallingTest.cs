@@ -15,7 +15,7 @@ public class ApiCallingTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.U) && ApiManager.IsReady)
         {
             var user = new UserName("");
-            ApiManager.Instance.GetUser(user, () => Log("user name done"));
+            ApiManager.Instance.GetUser(user, (userdata) => Log("user name done"));
         }
 
         if (Input.GetKeyDown(KeyCode.S) && ApiManager.IsReady)
