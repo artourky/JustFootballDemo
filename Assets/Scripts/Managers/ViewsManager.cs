@@ -85,5 +85,6 @@ public enum ViewType
 {
     HomeView,
     CardsView,
-    ClubsView
+    ClubsView,
+    ProfileView
 }

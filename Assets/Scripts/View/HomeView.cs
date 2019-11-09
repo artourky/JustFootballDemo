@@ -22,5 +22,9 @@ public class HomeView : UIView<HomeModel, HomeController>
     {
         Controller.OpenCardsView();
     }
+    public void OnProfileClick()
+    {
+        Controller.OpenProfileView();
+    }
 
 }

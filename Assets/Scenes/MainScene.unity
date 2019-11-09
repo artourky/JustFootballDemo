@@ -312,6 +312,9 @@ MonoBehaviour:
   - Type: 1
     ViewObject: {fileID: 4200301598572009851, guid: 2eb5cb278911ff54d8d04e199f688f48,
       type: 3}
+  - Type: 3
+    ViewObject: {fileID: 4341046623035065645, guid: 1ced518e2eae4764eb0fb15d8f3c3a20,
+      type: 3}
 --- !u!4 &2008409185
 Transform:
   m_ObjectHideFlags: 0
