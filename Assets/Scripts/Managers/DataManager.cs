@@ -16,11 +16,6 @@ public class UserData
     public LocationData location;
     public string pictureUrl;
     public string clubPictureUrl;
-
-    public override string ToString()
-    {
-        return username + " " + club + " " + location.lat + " " + location.lng + " " + pictureUrl + " " + clubPictureUrl;
-    }
 }
 
 [Serializable]
