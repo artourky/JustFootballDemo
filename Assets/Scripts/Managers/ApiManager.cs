@@ -8,14 +8,15 @@ using UnityEngine.Networking;
 public class ApiManager : MonoBehaviour
 {
     private const string _apiUrl = "https://demo.dev.justfootball.io/api";
-    private const string _authUrl = "/auth/token";
-    private const string _getUsrUrl = "/user/get/"; // + user id
-    private const string _setUsrNameUrl = "/user/set/username";
-    private const string _setClubUrl = "/user/set/club";
-    private const string _setUsrLocUrl = "/user/set/location";
-    private const string _cardsUrl = "/cards";
-    private const string _clubsUrl = "/clubs";
-    private const string _getClubUrl = "/club/"; // + club id
+    private const string _authorizationUrl = _apiUrl + "/auth/token";
+    private const string _getMyUserUrl = _apiUrl + "/user/me";
+    private const string _getUserUrl = _apiUrl + "/user/get/"; // + user id
+    private const string _setUsernameUrl = _apiUrl + "/user/set/username";
+    private const string _setClubUrl = _apiUrl + "/user/set/club";
+    private const string _updateUserLocationUrl = _apiUrl + "/user/set/location";
+    private const string _getCardsUrl = _apiUrl + "/cards";
+    private const string _getAllClubsUrl = _apiUrl + "/clubs";
+    private const string _getClubUrl = _apiUrl + "/club/"; // + club id
 
     private static string _deviceID;
     private static string _authToken;
@@ -40,11 +41,9 @@ public class ApiManager : MonoBehaviour
         _deviceID = IsNewUser ? Guid.NewGuid().ToString() : _deviceID;
         var token = new Token(_deviceID);
         var rawBytes = Encoding.UTF8.GetBytes(token.ToJson());
-        Log("Get Auth Token! " + _deviceID);
+        Log("Getting authorization token using this id \"" + _deviceID + "\"");
 
-        var url = _apiUrl + _authUrl;
-
-        request = new UnityWebRequest(url, "POST");
+        request = new UnityWebRequest(_authorizationUrl, "POST");
         request.uploadHandler = new UploadHandlerRaw(rawBytes);
         request.downloadHandler = new DownloadHandlerBuffer();
 
@@ -54,7 +53,7 @@ public class ApiManager : MonoBehaviour
 
         IsReady = request.responseCode == 200L;
         _authToken = request.downloadHandler.text;
-        Log("ApiManager is ready? " + IsReady);
+        Log("Calling other requests are allowed? " + IsReady);
     }
 
     private void SetRequestInfo(string jsonBody = "")
@@ -106,9 +105,9 @@ public class ApiManager : MonoBehaviour
     {
         StringBuilder url = new StringBuilder();
         if (!string.IsNullOrEmpty(userId))
-            url.Append(_apiUrl + _getUsrUrl + userId);
+            url.Append(_getUserUrl).Append(userId);
         else
-            url.Append(_apiUrl + "/user/me");
+            url.Append(_getMyUserUrl);
 
         request = new UnityWebRequest(url.ToString(), "GET");
 
@@ -124,10 +123,7 @@ public class ApiManager : MonoBehaviour
 
     private IEnumerator SetUserName(string newUserName, Action onComplete = null)
     {
-        StringBuilder url = new StringBuilder();
-        url.Append(_apiUrl).Append(_setUsrNameUrl);
-
-        request = new UnityWebRequest(url.ToString(), "POST");
+        request = new UnityWebRequest(_setUsernameUrl, "POST");
         SetRequestInfo(newUserName);
         yield return request.SendWebRequest();
         Log(request.downloadHandler.text);
@@ -137,12 +133,8 @@ public class ApiManager : MonoBehaviour
 
     private IEnumerator SetClub(string clubId, Action onComplete = null)
     {
-        StringBuilder url = new StringBuilder();
-        url.Append(_apiUrl).Append(_setClubUrl);
-
-        request = new UnityWebRequest(url.ToString(), "POST");
+        request = new UnityWebRequest(_setClubUrl, "POST");
         SetRequestInfo(clubId);
-
         yield return request.SendWebRequest();
         Log(request.downloadHandler.text);
 
@@ -151,12 +143,8 @@ public class ApiManager : MonoBehaviour
 
     private IEnumerator UpdUserLocation(string locJson, Action onComplete = null)
     {
-        StringBuilder url = new StringBuilder();
-        url.Append(_apiUrl).Append(_setUsrLocUrl);
-
-        request = new UnityWebRequest(url.ToString(), "POST");
+        request = new UnityWebRequest(_updateUserLocationUrl, "POST");
         SetRequestInfo(locJson);
-
         yield return request.SendWebRequest();
         Log(request.downloadHandler.text);
 
@@ -165,16 +153,14 @@ public class ApiManager : MonoBehaviour
 
     private IEnumerator GetCards(Action<CardsData.CardData[]> onComplete = null)
     {
-        StringBuilder url = new StringBuilder();
-        url.Append(_apiUrl).Append(_cardsUrl);
-        request = new UnityWebRequest(url.ToString(), "GET");
+        request = new UnityWebRequest(_getCardsUrl, "GET");
         SetRequestInfo();
 
         yield return request.SendWebRequest();
 
-        url = new StringBuilder();
-        url.Append(request.downloadHandler.text).Insert(0, "{\"cards\":").Append('}');
-        var cards = JsonUtility.FromJson<CardsData>(url.ToString());
+        StringBuilder response = new StringBuilder();
+        response.Append(request.downloadHandler.text).Insert(0, "{\"cards\":").Append('}');
+        var cards = JsonUtility.FromJson<CardsData>(response.ToString());
         onComplete?.Invoke(cards.cards);
     }
 
@@ -182,20 +168,19 @@ public class ApiManager : MonoBehaviour
     {
         StringBuilder url = new StringBuilder();
         if (!string.IsNullOrEmpty(clubId))
-            url.Append(_apiUrl + _getClubUrl + clubId);
+            url.Append(_getClubUrl + clubId);
         else
-            url.Append(_apiUrl + _clubsUrl);
+            url.Append(_getAllClubsUrl);
 
         request = new UnityWebRequest(url.ToString(), "GET");
 
         SetRequestInfo();
 
         yield return request.SendWebRequest();
-        url = new StringBuilder();
-        url.Append(request.downloadHandler.text).Insert(0, "{\"clubs\":").Append('}');
-        var clubs = JsonUtility.FromJson<ClubsData>(url.ToString());
+        StringBuilder response = new StringBuilder();
+        response.Append(request.downloadHandler.text).Insert(0, "{\"clubs\":").Append('}');
+        var clubs = JsonUtility.FromJson<ClubsData>(response.ToString());
         onComplete?.Invoke(clubs.clubs);
-        Log(request.downloadHandler.text);
     }
 
     private void Log(string strToLog)
