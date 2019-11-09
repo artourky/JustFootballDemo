@@ -13,4 +13,10 @@ public class HomeController : UIController<HomeModel>
     {
         ViewsManager.Instance.OpenView(ViewType.ClubsView);
     }
+    public void OpenCardsView()
+    {
+        ViewsManager.Instance.OpenView(ViewType.CardsView);
+    }
+
+    
 }

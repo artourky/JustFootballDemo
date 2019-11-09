@@ -18,4 +18,9 @@ public class HomeView : UIView<HomeModel, HomeController>
     {
         Controller.OpenClubView();
     }
+    public void OnCardsClick()
+    {
+        Controller.OpenCardsView();
+    }
+
 }
