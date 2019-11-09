@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class ClubsController : UIController<ClubsModel>
 {
@@ -10,8 +12,7 @@ public class ClubsController : UIController<ClubsModel>
         Model.RequestClubs();
     }
     public void OnClubItemClicked(string ClubID)
-   {
+    {
         Debug.Log("ClubClicked " + ClubID);
-        // call API and send ClubID
-   }
+    }
 }

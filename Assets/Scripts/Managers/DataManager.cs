@@ -38,6 +38,20 @@ public class CardsData
     public CardData[] cards;
 }
 
+[Serializable]
+public class ClubsData
+{
+    [System.Serializable]
+    public class ClubData
+    {
+        public string id;
+        public string logoUrl;
+        public string name;
+        public string league;
+    }
+    public ClubData[] clubs;
+}
+
 public class DataManager : MonoBehaviour
 {
 }

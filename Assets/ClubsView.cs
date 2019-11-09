@@ -15,13 +15,13 @@ public class ClubsView : UIView<ClubsModel,ClubsController>
     }
     private void ClubsListChanged()
     {
-        for (int i = 0; i < Model.ClubsList.Count; i++)
+        for (int i = 0; i < Model.ClubsList.Length; i++)
         {
             ClubItem clubItem;
             if (ClubsList.Count <= i)
             {
                 GameObject ClubObject = Instantiate(ClubPrefab, ClubsScrollContent);
-                ClubObject.name = Model.ClubsList[i].ClubName + Model.ClubsList[i].ClubID;
+                ClubObject.name = Model.ClubsList[i].name + Model.ClubsList[i].id;
                 clubItem = ClubObject.GetComponent<ClubItem>();
                 ClubsList.Add(clubItem);
             }
@@ -32,13 +32,13 @@ public class ClubsView : UIView<ClubsModel,ClubsController>
             HandleClubItemData(Model.ClubsList[i], clubItem);
         }
     }
-    private void HandleClubItemData(ClubData clubData,ClubItem clubGameObject)
+    private void HandleClubItemData(ClubsData.ClubData clubData,ClubItem clubGameObject)
     {
         clubGameObject.clubButton.onClick.RemoveAllListeners();
-        clubGameObject.clubButton.onClick.AddListener(()=> { OnClubClicked(clubData.ClubID); });
-        clubGameObject.clubImage.sprite = clubData.ClubImage;
-        clubGameObject.clubName.text = clubData.ClubName;
-        clubGameObject.clubLeague.text = clubData.ClubLeague;
+        clubGameObject.clubButton.onClick.AddListener(()=> { OnClubClicked(clubData.id); });
+        //StartCoroutine(Controller.GetTexture((sprite)=> { clubGameObject.clubImage.sprite = sprite; }, clubData.logoUrl));
+        clubGameObject.clubName.text = clubData.name;
+        clubGameObject.clubLeague.text = clubData.league;
     }
     private void OnClubClicked(string clubID)
     {
