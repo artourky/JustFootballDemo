@@ -35,18 +35,31 @@ public class CardsView : UIView<CardsModel,CardsController>
     {
         cardItem.CardButton.onClick.RemoveAllListeners();
         cardItem.CardButton.onLongPress.RemoveAllListeners();
-
-        cardItem.CardButton.onClick.AddListener(() => { OnCardClicked(cardData.id); });
+        cardItem.CardButton.onLongPressCanceled.RemoveAllListeners();
+        cardItem.CardButton.onClick.AddListener(() => { OnCardClicked(cardData.id,cardItem.gameObject); });
         cardItem.CardButton.onLongPress.AddListener(() => { OnCardLongPressed(cardItem.gameObject); });
+        cardItem.CardButton.onLongPressCanceled.AddListener(() => { OnLongPressCanceled(cardItem.gameObject); });
+        cardItem.CardButton.onLongPressStart.AddListener(() => { StartShakeAnimation(cardItem.gameObject); });
+
         cardItem.playerName.text = cardData.username;
     }
-    private void OnCardClicked(string clubID)
+    private void OnCardClicked(string clubID,GameObject button)
     {
         Controller.OnCardItemClicked(clubID);
     }
+
     private void OnCardLongPressed(GameObject cardItem)
     {
         Destroy(cardItem);
     }
+    private void OnLongPressCanceled(GameObject button)
+    {
+        AnimationManager.Instance.StopAnimation(button, AnimationType.Shake);
+    }
+    private void StartShakeAnimation(GameObject button)
+    {
+        AnimationManager.Instance.AddAnimation(AnimationType.Shake, button);
+    }
+
 
 }
