@@ -17,6 +17,10 @@ public class HomeController : UIController<HomeModel>
     {
         ViewsManager.Instance.OpenView(ViewType.CardsView);
     }
+    public void OpenProfileView()
+    {
+        ViewsManager.Instance.OpenView(ViewType.ProfileView);
+    }
 
     
 }
