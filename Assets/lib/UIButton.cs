@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class UIButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
+public class UIButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler,IPointerClickHandler
 {
 
     [SerializeField]
@@ -25,9 +25,6 @@ public class UIButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public void OnPointerUp(PointerEventData eventData)
     {
         CancelInvoke("OnLongPress");
-
-        if (!held)
-            onClick.Invoke();
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -39,5 +36,11 @@ public class UIButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         held = true;
         onLongPress.Invoke();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!held)
+            onClick.Invoke();
     }
 }
