@@ -14,7 +14,7 @@ public abstract class UIView : MonoBehaviour
     {
 
     }
-    public virtual void SetupView()
+    public virtual void SetupView(object dataObject = null)
     {
     }
     public virtual void ShowView()
@@ -36,14 +36,13 @@ public abstract class UIView<M, C> : UIView
 {
     public M Model;
     protected C Controller;
-    public override void Awake()
+    public override void SetupView(object dataObject=null)
     {
         base.Awake();
         Controller = new C();
         Model = Model ?? new M(); 
         RegisterDependency();
-        Controller.Setup(Model);
-        SetupView();
+        Controller.Setup(Model,dataObject);
         ShowView();
     }
 }

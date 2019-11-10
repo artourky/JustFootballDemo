@@ -4,8 +4,9 @@ using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
-public class ApiManager : MonoBehaviour
+public class ApiManager : MonoBehaviourSingleton<ApiManager>
 {
     private const string _apiUrl = "https://demo.dev.justfootball.io/api";
     private const string _authorizationUrl = _apiUrl + "/auth/token";
@@ -23,16 +24,14 @@ public class ApiManager : MonoBehaviour
 
     private UnityWebRequest request;
 
-    public static ApiManager Instance;
     public bool IsNewUser = true;
 
     public static bool IsReady;
 
-    private void Awake()
+    public override void Awake()
     {
-        Instance = this;
+        base.Awake();
         _deviceID = SystemInfo.deviceUniqueIdentifier;
-
         StartCoroutine(GetAuthentication());
     }
 
@@ -54,6 +53,10 @@ public class ApiManager : MonoBehaviour
         IsReady = request.responseCode == 200L;
         _authToken = request.downloadHandler.text;
         Log("Calling other requests are allowed? " + IsReady);
+        if( IsReady )
+        {
+            SceneManager.LoadScene( "MainScene" );
+        }
     }
 
     private void SetRequestInfo(string jsonBody = "")

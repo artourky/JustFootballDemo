@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class HomeController : UIController<HomeModel>
 {
-    protected override void Close()
+    public override void Setup(HomeModel model, object dataObject)
     {
-        base.Close();
+        base.Setup(model);
+        Model.RequestProfileData();
     }
 
     public void OpenClubView()

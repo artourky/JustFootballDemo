@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3646986429286654004}
   - component: {fileID: 3646986429286654005}
-  - component: {fileID: 3646986429286654002}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -59,23 +58,9 @@ MonoBehaviour:
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!114 &3646986429286654002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3646986429286654007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 1
 --- !u!1 &3646986429595751628
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,6 +301,7 @@ GameObject:
   - component: {fileID: 3646986430078031874}
   - component: {fileID: 3646986430078031877}
   - component: {fileID: 3646986430078031876}
+  - component: {fileID: 7914370925445666969}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -339,10 +325,10 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1012.3}
-  m_Pivot: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -139.69995}
+  m_SizeDelta: {x: 0, y: -139.69995}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3646986430078031874
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -409,6 +395,24 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7914370925445666969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3646986430078031878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a21b66c0614a733448991c09e786c0bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActiveElements: []
+  Template: {fileID: 2617186739517566283, guid: 31f16d40a21ada146b24dede6ffbaf77,
+    type: 3}
+  ElementsPoolCapacity: 20
+  ExternalViewPort: {fileID: 0}
+  Data: []
 --- !u!1 &3646986430131813479
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,6 +530,7 @@ MonoBehaviour:
   ClubPrefab: {fileID: 6327236165126194737, guid: 31f16d40a21ada146b24dede6ffbaf77,
     type: 3}
   ClubsList: []
+  clubsScroll: {fileID: 7914370925445666969}
 --- !u!1 &3646986430141061574
 GameObject:
   m_ObjectHideFlags: 0

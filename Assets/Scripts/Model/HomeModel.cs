@@ -5,6 +5,15 @@ using UnityEngine;
 [System.Serializable]
 public class HomeModel : UIModel
 {
-    public string playerName;
-    public Sprite playerImage;
+    public UserData playerData;
+    public void RequestProfileData()
+    {
+        ApiManager.Instance.GetUser(null, OnGetUserData);
+    }
+    private void OnGetUserData(UserData userData)
+    {
+        playerData = userData;
+        NotifyOnPropertyChanged("PlayerData");
+    }
+
 }

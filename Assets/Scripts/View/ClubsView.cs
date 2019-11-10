@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class ClubsView : UIView<ClubsModel,ClubsController>
     public RectTransform ClubsScrollContent;
     public GameObject ClubPrefab;
     public List<ClubItem> ClubsList;
+    public ClubsScroll clubsScroll;
     public override void RegisterDependency()
     {
         base.RegisterDependency();
@@ -15,30 +17,21 @@ public class ClubsView : UIView<ClubsModel,ClubsController>
     }
     private void ClubsListChanged()
     {
-        for (int i = 0; i < Model.ClubsList.Length; i++)
+
+        if( Model.ClubsList.Length > 0 )
         {
-            ClubItem clubItem;
-            if (ClubsList.Count <= i)
-            {
-                GameObject ClubObject = Instantiate(ClubPrefab, ClubsScrollContent);
-                ClubObject.name = Model.ClubsList[i].name + Model.ClubsList[i].id;
-                clubItem = ClubObject.GetComponent<ClubItem>();
-                ClubsList.Add(clubItem);
-            }
-            else
-            {
-                clubItem = ClubsList[i];
-            }
-            HandleClubItemData(Model.ClubsList[i], clubItem);
+            clubsScroll.Initialize(Model.ClubsList.ToList());
+
+        }
+        for (int i = 0; i < clubsScroll.ActiveElements.Count; i++)
+        {
+            HandleClubItemData( clubsScroll.ActiveElements[i]);
         }
     }
-    private void HandleClubItemData(ClubsData.ClubData clubData,ClubItem clubGameObject)
+    private void HandleClubItemData(ClubItem clubGameObject)
     {
         clubGameObject.clubButton.onClick.RemoveAllListeners();
-        clubGameObject.clubButton.onClick.AddListener(()=> { OnClubClicked(clubData.id); });
-        //StartCoroutine(Controller.GetTexture((sprite)=> { clubGameObject.clubImage.sprite = sprite; }, clubData.logoUrl));
-        clubGameObject.clubName.text = clubData.name;
-        clubGameObject.clubLeague.text = clubData.league;
+        clubGameObject.clubButton.onClick.AddListener(()=> { OnClubClicked(clubGameObject.Data.id); });
     }
     private void OnClubClicked(string clubID)
     {

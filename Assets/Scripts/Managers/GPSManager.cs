@@ -11,21 +11,14 @@ public enum LocationState
     Enabled
 }
 
-public class GPSManager : MonoBehaviour
+public class GPSManager : MonoBehaviourSingleton<GPSManager>
 {
-    public static GPSManager Instance;
     public LocationInfo LastData;
     private const float EarthRadius = 6371;
     private LocationState _state;
 
     private void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(this);
-        }
-
         StartCoroutine(InitalizeGpsService());
     }
 

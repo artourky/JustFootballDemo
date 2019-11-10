@@ -36,12 +36,14 @@ public class ViewsManager : MonoBehaviour
         }
     }
 
-    public void OpenView( ViewType viewType )
+    public void OpenView( ViewType viewType, object dataObject =null)
     {
         DisableOnTopOfStack();
 
         var viewobject = Instantiate(ViewsObjectsList.FirstOrDefault(view => view.Type == viewType).ViewObject);
-        _viewsStack.Add( viewobject.GetComponent<UIView>());
+        var viewToOpen = viewobject.GetComponent<UIView>();
+        viewToOpen.SetupView( dataObject );
+        _viewsStack.Add(viewToOpen);
     }
 
     private void DisableOnTopOfStack()

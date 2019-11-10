@@ -709,19 +709,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ViewGameObject: {fileID: 4341046622606252128}
   Model:
-    playerData:
-      username: 
-      club: 
-      location:
-        lat: 0
-        lng: 0
-      pictureUrl: 
-      clubPictureUrl: 
-  profileImage: {fileID: 4341046623300855133}
-  clubIcon: {fileID: 4341046622629677003}
+    IsMyProfile: 0
+  ProfileImage: {fileID: 4341046623300855133}
+  ClubIcon: {fileID: 4341046622629677003}
   ProfileName: {fileID: 4341046623556305590}
   ClubeName: {fileID: 4341046621905382536}
   ClubeLeague: {fileID: 4341046623096137135}
+  ChangeNameButton: {fileID: 4341046623084031120}
+  UserNameInputField: {fileID: 4341046621831891710}
 --- !u!1 &4341046623084031122
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,7 +834,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4341046623084031121}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4341046623035065654}
+        m_MethodName: ChooseNameClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4341046623096137121
 GameObject:
   m_ObjectHideFlags: 0

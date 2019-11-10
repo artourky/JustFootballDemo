@@ -19,10 +19,11 @@ public class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    protected void Awake()
+    public virtual void Awake()
     {
         _instance = (T)FindObjectOfType(typeof(T));
-        if (_instance == null) _instance = this as T;
+        if( _instance == null ){_instance = this as T;}
         else if (_instance != this) Destroy(gameObject);
+        DontDestroyOnLoad(this);
     }
 }

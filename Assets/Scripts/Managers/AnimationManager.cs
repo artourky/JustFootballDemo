@@ -35,6 +35,8 @@ public class AnimationManager : MonoBehaviourSingleton<AnimationManager>
         if (!AnimationList.ContainsKey(refrenceGameObject))
             return;
         var animationHandlerIndex = AnimationList[refrenceGameObject].FindIndex(x => x.AnimationType == animationType);
+        if(animationHandlerIndex == -1)
+            return;
         AnimationList[refrenceGameObject][animationHandlerIndex].Stop();
         AnimationList[refrenceGameObject].RemoveAt(animationHandlerIndex);
     }

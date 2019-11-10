@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class CardsController : UIController<CardsModel>
 {
-    public override void Setup(CardsModel model)
+    public override void Setup(CardsModel model, object dataObject)
     {
         base.Setup(model);
         Model.RequestCards();
     }
-    public void OnCardItemClicked(string CardID)
+    public void OnCardItemClicked(string cardID)
     {
-        Debug.Log("CardClicked " + CardID);
+        Debug.Log("CardClicked " + cardID);
+       
+        ViewsManager.Instance.OpenView( ViewType.ProfileView , cardID);
     }
 
 }

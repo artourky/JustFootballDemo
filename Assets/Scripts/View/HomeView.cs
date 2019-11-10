@@ -10,8 +10,17 @@ public class HomeView : UIView<HomeModel, HomeController>
     public override void RegisterDependency()
     {
         base.RegisterDependency();
-        Model.ListenOnPropertyChanged("playerName", () => { playerName.text = Model.playerName; });
-        Model.ListenOnPropertyChanged("playerImage", () => { playerImage.sprite = Model.playerImage; });
+        Model.ListenOnPropertyChanged("PlayerData", UpdateView);
+    }
+
+    public void UpdateView()
+    {
+        if(Model.playerData.pictureUrl != "")
+        {
+            DataManager.Instance.GetSpriteByUrl(Model.playerData.pictureUrl,
+                (image) => { playerImage.sprite = image; });
+            playerName.text = Model.playerData.username;
+        }
     }
 
     public void OnClubClick()

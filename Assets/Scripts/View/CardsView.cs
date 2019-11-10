@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CardsView : UIView<CardsModel,CardsController>
@@ -7,6 +8,7 @@ public class CardsView : UIView<CardsModel,CardsController>
     public RectTransform CardsContent;
     public GameObject CardItemPrefab;
     public List<CardItem> CardsList;
+    public CardsScroll cardsScroll;
     public override void RegisterDependency()
     {
         base.RegisterDependency();
@@ -14,43 +16,35 @@ public class CardsView : UIView<CardsModel,CardsController>
     }
     private void CardsListChanged()
     {
-        for (int i = 0; i < Model.CardsList.Length; i++)
+        if(Model.CardsList.Length > 0)
         {
-            CardItem cardItem;
-            if (CardsList.Count <= i)
+            cardsScroll.Initialize(Model.CardsList.ToList());
+            for ( int i = 0; i < cardsScroll.ActiveElements.Count; i++ )
             {
-                GameObject ClubObject = Instantiate(CardItemPrefab, CardsContent);
-                ClubObject.name = Model.CardsList[i].username + Model.CardsList[i].id;
-                cardItem = ClubObject.GetComponent<CardItem>();
-                CardsList.Add(cardItem);
+                HandleClubItemData(cardsScroll.ActiveElements[ i ] );
             }
-            else
-            {
-                cardItem = CardsList[i];
-            }
-            HandleClubItemData(Model.CardsList[i], cardItem);
         }
     }
-    private void HandleClubItemData(CardsData.CardData cardData, CardItem cardItem)
+    private void HandleClubItemData( CardItem cardItem)
     {
         cardItem.CardButton.onClick.RemoveAllListeners();
         cardItem.CardButton.onLongPress.RemoveAllListeners();
         cardItem.CardButton.onLongPressCanceled.RemoveAllListeners();
-        cardItem.CardButton.onClick.AddListener(() => { OnCardClicked(cardData.id,cardItem.gameObject); });
-        cardItem.CardButton.onLongPress.AddListener(() => { OnCardLongPressed(cardItem.gameObject); });
+        cardItem.CardButton.onClick.AddListener(() => { OnCardClicked(cardItem); });
+        cardItem.CardButton.onLongPress.AddListener(() => { OnCardLongPressed(cardItem); });
         cardItem.CardButton.onLongPressCanceled.AddListener(() => { OnLongPressCanceled(cardItem.gameObject); });
         cardItem.CardButton.onLongPressStart.AddListener(() => { StartShakeAnimation(cardItem.gameObject); });
 
-        cardItem.playerName.text = cardData.username;
     }
-    private void OnCardClicked(string clubID,GameObject button)
+    private void OnCardClicked(CardItem cardItem)
     {
-        Controller.OnCardItemClicked(clubID);
+        Controller.OnCardItemClicked(cardItem.Data.id);
     }
 
-    private void OnCardLongPressed(GameObject cardItem)
+    private void OnCardLongPressed(CardItem cardItem)
     {
-        Destroy(cardItem);
+        cardsScroll.Remove(cardItem.Data);
+        AnimationManager.Instance.StopAnimation(cardItem.gameObject, AnimationType.Shake);
     }
     private void OnLongPressCanceled(GameObject button)
     {

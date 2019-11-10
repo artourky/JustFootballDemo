@@ -54,21 +54,37 @@ public class ClubsData
 
 }
 
-public class DataManager : MonoBehaviour
+public class DataManager : MonoBehaviourSingleton<DataManager>
 {
-    public static DataManager Instance;
-
     public Image tstUIImg;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-
+    private float downloadTimeStart;
     public void DownloadSprites(ClubsData clubObject)
     {
         clubObject.clubsSprites = new Dictionary<string, Texture2D>();
+        downloadTimeStart = Time.time;
         StartCoroutine(GetSprites(clubObject));
+
+    }
+
+    public void GetSpriteByUrl(string spriteUrl, Action<Sprite> callback)
+    {
+        StartCoroutine(GetSprite(spriteUrl, callback));
+    }
+
+    private IEnumerator GetSprite(string spriteUrl, Action<Sprite> callback)
+    {
+        UnityWebRequest req = UnityWebRequestTexture.GetTexture(spriteUrl);
+
+        yield return req.SendWebRequest();
+
+        if (req.isNetworkError || req.isHttpError)
+        {
+            Debug.Log(req.error);
+        }
+        var texture2D = DownloadHandlerTexture.GetContent(req);
+        var sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+        callback.Invoke(sprite);
     }
 
     private IEnumerator GetSprites(ClubsData clubObject)
@@ -83,9 +99,9 @@ public class DataManager : MonoBehaviour
             {
                 Debug.Log(req.error);
             }
-        
-            clubObject.clubsSprites.Add(clubObject.clubs[i].logoUrl, DownloadHandlerTexture.GetContent(req));
-            tstUIImg.sprite = Sprite.Create(clubObject.clubsSprites[clubObject.clubs[i].logoUrl], new Rect(0, 0, clubObject.clubsSprites[clubObject.clubs[i].logoUrl].width, clubObject.clubsSprites[clubObject.clubs[i].logoUrl].height), new Vector2(0.5f, 0.5f));
+            clubObject.clubsSprites[clubObject.clubs[i].id]= DownloadHandlerTexture.GetContent(req);
+          //  tstUIImg.sprite = Sprite.Create(clubObject.clubsSprites[clubObject.clubs[i].logoUrl], new Rect(0, 0, clubObject.clubsSprites[clubObject.clubs[i].logoUrl].width, clubObject.clubsSprites[clubObject.clubs[i].logoUrl].height), new Vector2(0.5f, 0.5f));
         }
+        Debug.Log( "Finished in: "+ (Time.time-downloadTimeStart));
     }
 }
