@@ -181,6 +181,7 @@ public class ApiManager : MonoBehaviour
         StringBuilder response = new StringBuilder();
         response.Append(request.downloadHandler.text).Insert(0, "{\"clubs\":").Append('}');
         var clubs = JsonUtility.FromJson<ClubsData>(response.ToString());
+        DataManager.Instance.DownloadSprites(clubs);
         onComplete?.Invoke(clubs.clubs);
     }
 

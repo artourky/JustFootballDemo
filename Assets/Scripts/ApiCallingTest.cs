@@ -6,7 +6,7 @@ public class ApiCallingTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Log("Press 'U' to GetUser with UserName.\nPress 'C' to Get a club or Clubs");
+        Log("Press 'U' to GetUser with UserName, Press 'C' to Get a club or Clubs, Press 'Q' to Get Cards");
     }
 
     // Update is called once per frame
@@ -26,8 +26,8 @@ public class ApiCallingTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.C) && ApiManager.IsReady)
         {
-            //var club = new Club("");
-            ApiManager.Instance.GetCardss((cards) => Log("cardss done"));
+            var club = new Club("");
+            ApiManager.Instance.GetClubs(club, (cards) => Log("cardss done"));
         }
 
         if (Input.GetKeyDown(KeyCode.Q) && ApiManager.IsReady)
