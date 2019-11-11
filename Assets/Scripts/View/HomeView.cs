@@ -21,6 +21,7 @@ public class HomeView : UIView<HomeModel, HomeController>
                 (image) => { playerImage.sprite = image; });
             playerName.text = Model.playerData.username;
         }
+        isLoaded = true;
     }
 
     public void OnClubClick()

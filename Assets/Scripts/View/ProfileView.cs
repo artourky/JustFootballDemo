@@ -74,13 +74,13 @@ public class ProfileView : UIView<ProfileModel, ProfileContoller>
         ClubeLeague.text = "";
         if (Model.PlayerData.pictureUrl == "" || Model.PlayerData.clubPictureUrl == "")
         { return; }
-        DataManager.Instance.GetSpriteByUrl(Model.PlayerData.pictureUrl, (image) => { ProfileImage.sprite = image; });
-        DataManager.Instance.GetSpriteByUrl(Model.PlayerData.clubPictureUrl, (image) => { ClubIcon.sprite = image; });
+        DataManager.Instance.GetSpriteByUrl(Model.PlayerData.pictureUrl, (image) => { if (ProfileImage == null) return; ProfileImage.sprite = image; });
+        DataManager.Instance.GetSpriteByUrl(Model.PlayerData.clubPictureUrl, (image) => { if (ClubIcon == null) return;  ClubIcon.sprite = image; });
+        isLoaded = true;
     }
     public void ChooseNameClicked()
     {
         IsEditMode = !IsEditMode;
-        // Controller.OnChangeNameClicked(UserNameInputField.text);
     }
 
     public void UserNameSubmited()

@@ -16,7 +16,8 @@ public class CardsView : UIView<CardsModel,CardsController>
     }
     private void CardsListChanged()
     {
-        if(Model.CardsList.Length > 0)
+        Debug.Log("Cards List Count > " + Model.CardsList.Length);
+        if(Model.CardsList.Length > 0 && cardsScroll != null)
         {
             cardsScroll.Initialize(Model.CardsList.ToList());
             for ( int i = 0; i < cardsScroll.ActiveElements.Count; i++ )
@@ -24,6 +25,7 @@ public class CardsView : UIView<CardsModel,CardsController>
                 HandleClubItemData(cardsScroll.ActiveElements[ i ] );
             }
         }
+        isLoaded = true;
     }
     private void HandleClubItemData( CardItem cardItem)
     {

@@ -17,8 +17,8 @@ public class ClubsView : UIView<ClubsModel,ClubsController>
     }
     private void ClubsListChanged()
     {
-
-        if( Model.ClubsList.Length > 0 )
+        Debug.Log("Clubs List Count > " + Model.ClubsList.Length);
+        if ( Model.ClubsList.Length > 0 && clubsScroll != null)
         {
             clubsScroll.Initialize(Model.ClubsList.ToList());
 
@@ -27,6 +27,7 @@ public class ClubsView : UIView<ClubsModel,ClubsController>
         {
             HandleClubItemData( clubsScroll.ActiveElements[i]);
         }
+        isLoaded = true;
     }
     private void HandleClubItemData(ClubItem clubGameObject)
     {
