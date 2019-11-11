@@ -8,11 +8,13 @@ public class ViewsManager : BaseManager<ViewsManager>
 {
     private List<UIView> _viewsStack;
     public List<ViewData> ViewsObjectsList;
-    TransitionAnimationCommand TransitionViewsAnimation;
+    Command TransitionViewsAnimationIn;
+    Command TransitionViewsAnimationOut;
     public override void Initialize()
     {
         _viewsStack = new List<UIView>();
-        TransitionViewsAnimation = new TransitionAnimationCommand(this, AnimationType.Transition, true);
+        TransitionViewsAnimationIn = new TransitionAnimationCommand(this, AnimationType.Transition, true);
+        TransitionViewsAnimationOut = new TransitionAnimationCommand(this, AnimationType.Transition, false);
         IsReady = true;
     }
     void Update()
@@ -29,9 +31,8 @@ public class ViewsManager : BaseManager<ViewsManager>
 
     IEnumerator LoadView(ViewType viewType, object dataObject = null, Action OnComplete = null)
     {
-        TransitionViewsAnimation.UpdateCommand(AnimationType.Transition,true);
-        TransitionViewsAnimation.Execute(null);
-        yield return new WaitUntil(() => TransitionViewsAnimation.IsFinished);
+        TransitionViewsAnimationIn.Execute(null);
+        yield return new WaitUntil(() => TransitionViewsAnimationIn.IsFinished);
         DisableOnTopOfStack();
         var viewobject = Instantiate(ViewsObjectsList.FirstOrDefault(view => view.Type == viewType).ViewObject);
         var viewToOpen = viewobject.GetComponent<UIView>();
@@ -42,9 +43,8 @@ public class ViewsManager : BaseManager<ViewsManager>
         {
             OnComplete.Invoke();
         }
-        TransitionViewsAnimation.UpdateCommand(AnimationType.Transition, false);
-        TransitionViewsAnimation.Execute(null);
-        yield return new WaitUntil(() => TransitionViewsAnimation.IsFinished);
+        TransitionViewsAnimationOut.Execute(null);
+        yield return new WaitUntil(() => TransitionViewsAnimationOut.IsFinished);
     }
     private void DisableOnTopOfStack()
     {
@@ -65,9 +65,8 @@ public class ViewsManager : BaseManager<ViewsManager>
         {
             yield break;
         }
-        TransitionViewsAnimation.UpdateCommand(AnimationType.Transition, true);
-        TransitionViewsAnimation.Execute(null);
-        yield return new WaitUntil(() => TransitionViewsAnimation.IsFinished);
+        TransitionViewsAnimationIn.Execute(null);
+        yield return new WaitUntil(() => TransitionViewsAnimationIn.IsFinished);
 
         var viewToClose = _viewsStack[_viewsStack.Count - 1];
         _viewsStack.Remove(viewToClose);
@@ -75,9 +74,8 @@ public class ViewsManager : BaseManager<ViewsManager>
 
         EnableOnTopOfStack();
 
-        TransitionViewsAnimation.UpdateCommand(AnimationType.Transition, false);
-        TransitionViewsAnimation.Execute(null);
-        yield return new WaitUntil(() => TransitionViewsAnimation.IsFinished);
+        TransitionViewsAnimationOut.Execute(null);
+        yield return new WaitUntil(() => TransitionViewsAnimationOut.IsFinished);
 
     }
 
