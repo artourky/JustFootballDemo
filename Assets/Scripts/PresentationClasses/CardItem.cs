@@ -21,6 +21,11 @@ public class CardItem : PooledElement<CardsData.CardData>
             SetupView( value );
         }
     }
+    public override void Updatedata()
+    {
+        Debug.Log( "Updateing Cards" );
+    }
+
     public void SetupView( CardsData.CardData data)
     {
         playerName.text = data.username;

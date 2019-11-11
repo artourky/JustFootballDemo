@@ -108,5 +108,13 @@ namespace Assets.Scripts.PooledScrollList
             base.OnDestroy();
             Destroy(_spaceElement.gameObject);
         }
+
+        protected void UpdateData()
+        {
+            for( int i = 0; i < ActiveElements.Count; i++ )
+            {
+                ActiveElements[i].Updatedata();
+            }
+        }
     }
 }

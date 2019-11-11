@@ -22,10 +22,16 @@ public class ClubItem : PooledElement<ClubsData.ClubData>
             SetupView(value);
         }
     }
+    public override void Updatedata()
+    {
+        CheckMarkImage.SetActive(Data.id == DataManager.Instance.MyData.club);
+    }
+
     public void SetupView(ClubsData.ClubData data)
     {
         clubName.text = data.name;
         clubLeague.text = data.league;
+        CheckMarkImage.SetActive( data.id == DataManager.Instance.MyData.club );
         DataManager.Instance.GetSpriteByUrl(data.logoUrl, (image) => { if (clubImage == null) return; clubImage.sprite = image; });
     }
 

@@ -12,6 +12,7 @@ public class HomeModel : UIModel
     }
     private void OnGetUserData(UserData userData)
     {
+        DataManager.Instance.MyData = userData;
         playerData = userData;
         NotifyOnPropertyChanged("PlayerData");
     }
