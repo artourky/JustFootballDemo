@@ -8,6 +8,7 @@ public class HomeController : UIController<HomeModel>
     {
         base.Setup(model);
         Model.RequestProfileData();
+
     }
 
     public void OpenClubView()

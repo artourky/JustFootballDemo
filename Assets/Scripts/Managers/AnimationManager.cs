@@ -9,11 +9,21 @@ public enum AnimationType
     FadeOut,
     ScaleIn,
     ScaleOut,
+    SplashScene,
+    Transition,
     None
 }
-public class AnimationManager : MonoBehaviourSingleton<AnimationManager>
+public class AnimationManager : BaseManager<AnimationManager>
 {
     private Dictionary<GameObject, List<AnimationHandler>> AnimationList = new Dictionary<GameObject, List<AnimationHandler>>();
+    public Animator transitionAnimator;
+    public Animator splashAnimation;
+    
+    public override void Initialize()
+    {
+        IsReady = true;
+    }
+
     public void AddAnimation(AnimationType animationType,GameObject refrenceGameObject,bool resetToOriginal = true)
     {
         if (!AnimationList.ContainsKey(refrenceGameObject))
@@ -30,6 +40,7 @@ public class AnimationManager : MonoBehaviourSingleton<AnimationManager>
         animationHandler.Start();
         
     }
+
     public void StopAnimation( GameObject refrenceGameObject, AnimationType animationType)
     {
         if (!AnimationList.ContainsKey(refrenceGameObject))
@@ -40,4 +51,13 @@ public class AnimationManager : MonoBehaviourSingleton<AnimationManager>
         AnimationList[refrenceGameObject][animationHandlerIndex].Stop();
         AnimationList[refrenceGameObject].RemoveAt(animationHandlerIndex);
     }
+    public void TransitionAnimation(bool start)
+    {
+        transitionAnimator.SetBool("IsOpen", start);
+    }
+    public void SplashAnimation()
+    {
+        splashAnimation.SetBool("IsOpen",true);
+    }
+
 }

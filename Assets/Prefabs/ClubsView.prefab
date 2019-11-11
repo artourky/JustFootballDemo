@@ -170,7 +170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -483, y: -15}
+  m_AnchoredPosition: {x: -483, y: -15.0000305}
   m_SizeDelta: {x: 450, y: 110}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3646986429728382548
@@ -526,6 +526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ViewGameObject: {fileID: 3646986429926766734}
+  isLoaded: 0
   ClubsScrollContent: {fileID: 3646986429286654004}
   ClubPrefab: {fileID: 6327236165126194737, guid: 31f16d40a21ada146b24dede6ffbaf77,
     type: 3}
@@ -653,7 +654,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 487, y: -15}
+  m_AnchoredPosition: {x: 487, y: -15.0000305}
   m_SizeDelta: {x: 450, y: 110}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3646986430334169831
@@ -838,8 +839,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: c1199a51490632242a76efc9c46d6749, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

@@ -54,11 +54,17 @@ public class ClubsData
 
 }
 
-public class DataManager : MonoBehaviourSingleton<DataManager>
+public class DataManager : BaseManager<DataManager>
 {
     public Image tstUIImg;
 
     private float downloadTimeStart;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        IsReady = true;
+    }
     public void DownloadSprites(ClubsData clubObject)
     {
         clubObject.clubsSprites = new Dictionary<string, Texture2D>();
@@ -71,7 +77,6 @@ public class DataManager : MonoBehaviourSingleton<DataManager>
     {
         StartCoroutine(GetSprite(spriteUrl, callback));
     }
-
     private IEnumerator GetSprite(string spriteUrl, Action<Sprite> callback)
     {
         UnityWebRequest req = UnityWebRequestTexture.GetTexture(spriteUrl);

@@ -11,17 +11,17 @@ public enum LocationState
     Enabled
 }
 
-public class GPSManager : MonoBehaviourSingleton<GPSManager>
+public class GPSManager : BaseManager<GPSManager>
 {
     public LocationInfo LastData;
     private const float EarthRadius = 6371;
     private LocationState _state;
 
-    private void Start()
+    public override void Initialize()
     {
         StartCoroutine(InitalizeGpsService());
+        IsReady = true;
     }
-
     private IEnumerator InitalizeGpsService()
     {
         if( !Input.location.isEnabledByUser )

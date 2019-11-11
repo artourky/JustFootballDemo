@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-public class ApiManager : MonoBehaviourSingleton<ApiManager>
+public class ApiManager : BaseManager<ApiManager>
 {
     private const string _apiUrl = "https://demo.dev.justfootball.io/api";
     private const string _authorizationUrl = _apiUrl + "/auth/token";
@@ -25,13 +25,14 @@ public class ApiManager : MonoBehaviourSingleton<ApiManager>
     private UnityWebRequest request;
 
     public bool IsNewUser = true;
-
-    public static bool IsReady;
-
     public override void Awake()
     {
         base.Awake();
         _deviceID = SystemInfo.deviceUniqueIdentifier;
+    }
+
+    public override void Initialize()
+    {
         StartCoroutine(GetAuthentication());
     }
 
@@ -53,10 +54,6 @@ public class ApiManager : MonoBehaviourSingleton<ApiManager>
         IsReady = request.responseCode == 200L;
         _authToken = request.downloadHandler.text;
         Log("Calling other requests are allowed? " + IsReady);
-        if( IsReady )
-        {
-            SceneManager.LoadScene( "MainScene" );
-        }
     }
 
     private void SetRequestInfo(string jsonBody = "")
@@ -170,6 +167,7 @@ public class ApiManager : MonoBehaviourSingleton<ApiManager>
 
     private IEnumerator GetClubs(string clubId = "", Action<ClubsData.ClubData[]> onComplete = null)
     {
+        Debug.Log("GetClubs Started > ");
         StringBuilder url = new StringBuilder();
         if (!string.IsNullOrEmpty(clubId))
             url.Append(_getClubUrl + clubId);
@@ -181,15 +179,20 @@ public class ApiManager : MonoBehaviourSingleton<ApiManager>
         SetRequestInfo();
 
         yield return request.SendWebRequest();
+        Debug.Log("GetClubs SendWebRequest > ");
+
         StringBuilder response = new StringBuilder();
         response.Append(request.downloadHandler.text).Insert(0, "{\"clubs\":").Append('}');
         var clubs = JsonUtility.FromJson<ClubsData>(response.ToString());
         DataManager.Instance.DownloadSprites(clubs);
         onComplete?.Invoke(clubs.clubs);
+        Debug.Log("GetClubs Finished > ");
+
     }
 
     private void Log(string strToLog)
     {
         Debug.Log("[ApiManager] " + strToLog);
     }
+
 }
