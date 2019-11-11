@@ -24,8 +24,8 @@ public class CardItem : PooledElement<CardsData.CardData>
     public void SetupView( CardsData.CardData data)
     {
         playerName.text = data.username;
-        DataManager.Instance.GetSpriteByUrl(data.pictureUrl,(image) =>{playerImage.sprite = image;} );
-        DataManager.Instance.GetSpriteByUrl(data.clubPictureUrl, (image) => { clubIcon.sprite = image; });
-
+        DataManager.Instance.GetSpriteByUrl(data.pictureUrl,(image) =>{
+            if (playerImage == null) return; playerImage.sprite = image;} );
+        DataManager.Instance.GetSpriteByUrl(data.clubPictureUrl, (image) => { if (clubIcon == null) return;  clubIcon.sprite = image; });
     }
 }

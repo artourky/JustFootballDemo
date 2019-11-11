@@ -26,7 +26,7 @@ public class ClubItem : PooledElement<ClubsData.ClubData>
     {
         clubName.text = data.name;
         clubLeague.text = data.league;
-        DataManager.Instance.GetSpriteByUrl(data.logoUrl, (image) => { clubImage.sprite = image; });
+        DataManager.Instance.GetSpriteByUrl(data.logoUrl, (image) => { if (clubImage == null) return; clubImage.sprite = image; });
     }
 
 }
