@@ -56,15 +56,11 @@ public class ClubsData
 
 public class DataManager : MonoBehaviourSingleton<DataManager>
 {
-    public Image tstUIImg;
+    public UserData MyData;
 
-    private float downloadTimeStart;
     public void DownloadSprites(ClubsData clubObject)
     {
         clubObject.clubsSprites = new Dictionary<string, Texture2D>();
-        downloadTimeStart = Time.time;
-        StartCoroutine(GetSprites(clubObject));
-
     }
 
     public void GetSpriteByUrl(string spriteUrl, Action<Sprite> callback)
@@ -87,21 +83,4 @@ public class DataManager : MonoBehaviourSingleton<DataManager>
         callback.Invoke(sprite);
     }
 
-    private IEnumerator GetSprites(ClubsData clubObject)
-    {
-        for (int i = 0; i < clubObject.clubs.Length; i++)
-        {
-            UnityWebRequest req = UnityWebRequestTexture.GetTexture(clubObject.clubs[i].logoUrl);
-
-            yield return req.SendWebRequest();
-
-            if (req.isNetworkError || req.isHttpError)
-            {
-                Debug.Log(req.error);
-            }
-            clubObject.clubsSprites[clubObject.clubs[i].id]= DownloadHandlerTexture.GetContent(req);
-          //  tstUIImg.sprite = Sprite.Create(clubObject.clubsSprites[clubObject.clubs[i].logoUrl], new Rect(0, 0, clubObject.clubsSprites[clubObject.clubs[i].logoUrl].width, clubObject.clubsSprites[clubObject.clubs[i].logoUrl].height), new Vector2(0.5f, 0.5f));
-        }
-        Debug.Log( "Finished in: "+ (Time.time-downloadTimeStart));
-    }
 }

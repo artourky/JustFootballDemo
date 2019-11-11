@@ -10,6 +10,20 @@ public class ClubsView : UIView<ClubsModel,ClubsController>
     public GameObject ClubPrefab;
     public List<ClubItem> ClubsList;
     public ClubsScroll clubsScroll;
+
+    void OnEnable()
+    {
+        Events.instance.AddListener<ClubDataUpdated>( OnClubDataUpdated  );
+    }
+
+    private void OnClubDataUpdated( ClubDataUpdated e )
+    {
+        for( int i = 0; i < clubsScroll.ActiveElements.Count; i++ )
+        {
+            clubsScroll.ActiveElements[i].Updatedata();
+        }
+    }
+
     public override void RegisterDependency()
     {
         base.RegisterDependency();
