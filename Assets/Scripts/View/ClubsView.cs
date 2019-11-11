@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ClubsView : UIView<ClubsModel,ClubsController>
+public class ClubsView : UIView<ClubsModel, ClubsController>
 {
     public RectTransform ClubsScrollContent;
     public GameObject ClubPrefab;
@@ -13,12 +13,17 @@ public class ClubsView : UIView<ClubsModel,ClubsController>
 
     void OnEnable()
     {
-        Events.instance.AddListener<ClubDataUpdated>( OnClubDataUpdated  );
+        Events.instance.AddListener<ClubDataUpdated>(OnClubDataUpdated);
     }
 
-    private void OnClubDataUpdated( ClubDataUpdated e )
+    void OnDisable()
     {
-        for( int i = 0; i < clubsScroll.ActiveElements.Count; i++ )
+        Events.instance.RemoveListener<ClubDataUpdated>(OnClubDataUpdated);
+    }
+
+    private void OnClubDataUpdated(ClubDataUpdated e)
+    {
+        for (int i = 0; i < clubsScroll.ActiveElements.Count; i++)
         {
             clubsScroll.ActiveElements[i].Updatedata();
         }
@@ -32,20 +37,20 @@ public class ClubsView : UIView<ClubsModel,ClubsController>
     private void ClubsListChanged()
     {
 
-        if( Model.ClubsList.Length > 0 )
+        if (Model.ClubsList.Length > 0)
         {
             clubsScroll.Initialize(Model.ClubsList.ToList());
 
         }
         for (int i = 0; i < clubsScroll.ActiveElements.Count; i++)
         {
-            HandleClubItemData( clubsScroll.ActiveElements[i]);
+            HandleClubItemData(clubsScroll.ActiveElements[i]);
         }
     }
     private void HandleClubItemData(ClubItem clubGameObject)
     {
         clubGameObject.clubButton.onClick.RemoveAllListeners();
-        clubGameObject.clubButton.onClick.AddListener(()=> { OnClubClicked(clubGameObject.Data.id); });
+        clubGameObject.clubButton.onClick.AddListener(() => { OnClubClicked(clubGameObject.Data.id); });
     }
     private void OnClubClicked(string clubID)
     {
