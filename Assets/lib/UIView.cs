@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ using UnityEngine;
 public abstract class UIView : MonoBehaviour
 {
     public GameObject ViewGameObject;
+    public bool isLoaded;
     public virtual void Awake()
     {
     }
@@ -27,7 +29,7 @@ public abstract class UIView : MonoBehaviour
     }
     public virtual void CloseView()
     {
-        ViewsManager.Instance.CloseViewOnTopOfStack();
+        ViewsManager.Instance.CloseOnTopOfStack();
     }
 }
 public abstract class UIView<M, C> : UIView
@@ -38,11 +40,10 @@ public abstract class UIView<M, C> : UIView
     protected C Controller;
     public override void SetupView(object dataObject=null)
     {
-        base.Awake();
         Controller = new C();
         Model = Model ?? new M(); 
         RegisterDependency();
-        Controller.Setup(Model,dataObject);
+        Controller.Setup(Model, dataObject);
         ShowView();
     }
 }

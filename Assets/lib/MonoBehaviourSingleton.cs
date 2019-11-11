@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBehaviour
+public interface Singleton
+{
+    void Init();
+}
+public class MonoBehaviourSingleton<T> : MonoBehaviour, Singleton where T : MonoBehaviour
 {
     static T _instance;
     public static T Instance
@@ -25,5 +29,9 @@ public class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBehaviour
         if( _instance == null ){_instance = this as T;}
         else if (_instance != this) Destroy(gameObject);
         DontDestroyOnLoad(this);
+    }
+
+    public void Init()
+    {
     }
 }
