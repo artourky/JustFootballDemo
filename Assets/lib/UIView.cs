@@ -70,7 +70,7 @@ public abstract class UIView<M, C> : UIView
         }
         if (retryCount == 5)
         {
-            // Show Toast
+            ViewsManager.Instance.ShowAlert("Can't load data from server.");
         }
     }
     
