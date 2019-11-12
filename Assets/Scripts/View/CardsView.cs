@@ -9,6 +9,7 @@ public class CardsView : UIView<CardsModel,CardsController>
     public GameObject CardItemPrefab;
     public List<CardItem> CardsList;
     public CardsScroll cardsScroll;
+
     public override void RegisterDependency()
     {
         base.RegisterDependency();
@@ -46,8 +47,10 @@ public class CardsView : UIView<CardsModel,CardsController>
     private void OnCardLongPressed(CardItem cardItem)
     {
         cardsScroll.Remove(cardItem.Data);
+        ViewsManager.Instance.ShowAlert("Card Deleted");
         AnimationManager.Instance.StopAnimation(cardItem.gameObject, AnimationType.Shake);
     }
+
     private void OnLongPressCanceled(GameObject button)
     {
         AnimationManager.Instance.StopAnimation(button, AnimationType.Shake);

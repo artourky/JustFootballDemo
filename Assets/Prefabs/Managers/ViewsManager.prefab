@@ -56,3 +56,5 @@ MonoBehaviour:
   - Type: 3
     ViewObject: {fileID: 4341046623035065645, guid: 1ced518e2eae4764eb0fb15d8f3c3a20,
       type: 3}
+  AlertGameObject: {fileID: 8658048244827692247, guid: 50d953afac276ae48a823faa2083a9de,
+    type: 3}
