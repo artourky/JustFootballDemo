@@ -36,7 +36,7 @@ public class TransitionAnimationCommand : Command
         {
             AnimationManager.Instance.TransitionAnimation(_open);
         }
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         IsFinished = true;
     }
 }

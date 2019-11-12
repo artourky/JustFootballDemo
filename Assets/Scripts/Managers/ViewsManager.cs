@@ -10,6 +10,8 @@ public class ViewsManager : BaseManager<ViewsManager>
     public List<ViewData> ViewsObjectsList;
     Command TransitionViewsAnimationIn;
     Command TransitionViewsAnimationOut;
+    private bool iswaitingForLoading = false;
+    public GameObject AlertGameObject;
 
     public override void Initialize()
     {
@@ -25,13 +27,33 @@ public class ViewsManager : BaseManager<ViewsManager>
             CloseOnTopOfStack();
         }
     }
+
+    public void ShowAlert(string alertMessage)
+    {
+        StartCoroutine(SetupAlert( alertMessage ) );
+    }
+
+    private IEnumerator SetupAlert(string alertMessage)
+    {
+        var alertObject = Instantiate( AlertGameObject ,_viewsStack[_viewsStack.Count-1].transform);
+        AnimationManager.Instance.AddAnimation(AnimationType.ScaleIn, alertObject);
+        alertObject.GetComponent<AlertMessage>().SetAlertMessage( alertMessage );
+        yield return new WaitForSeconds(1.5f);
+       Destroy(alertObject);
+    }
+
     public void OpenView( ViewType viewType, object dataObject = null,Action OnComplete = null)
     {
+        if(iswaitingForLoading)
+        {
+            return;
+        }
         StartCoroutine(LoadView(viewType, dataObject, OnComplete));
     }
 
     IEnumerator LoadView(ViewType viewType, object dataObject = null, Action OnComplete = null)
     {
+        iswaitingForLoading = true;
         TransitionViewsAnimationIn.Execute(null);
         yield return new WaitUntil(() => TransitionViewsAnimationIn.IsFinished);
         DisableOnTopOfStack();
@@ -46,6 +68,7 @@ public class ViewsManager : BaseManager<ViewsManager>
         }
         TransitionViewsAnimationOut.Execute(null);
         yield return new WaitUntil(() => TransitionViewsAnimationOut.IsFinished);
+        iswaitingForLoading = false;
     }
     private void DisableOnTopOfStack()
     {
@@ -58,11 +81,16 @@ public class ViewsManager : BaseManager<ViewsManager>
     }
     public void CloseOnTopOfStack()
     {
+        if (iswaitingForLoading)
+        {
+            return;
+        }
         StartCoroutine(CloseViewOnTopOfStack());
     }
     private IEnumerator CloseViewOnTopOfStack( )
     {
-        if( _viewsStack.Count == 1 )
+        iswaitingForLoading = true;
+        if ( _viewsStack.Count == 1 )
         {
             yield break;
         }
@@ -77,7 +105,7 @@ public class ViewsManager : BaseManager<ViewsManager>
 
         TransitionViewsAnimationOut.Execute(null);
         yield return new WaitUntil(() => TransitionViewsAnimationOut.IsFinished);
-
+        iswaitingForLoading = false;
     }
 
     private void EnableOnTopOfStack()
