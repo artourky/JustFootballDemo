@@ -10,6 +10,7 @@ public class ViewsManager : BaseManager<ViewsManager>
     public List<ViewData> ViewsObjectsList;
     Command TransitionViewsAnimationIn;
     Command TransitionViewsAnimationOut;
+
     public override void Initialize()
     {
         _viewsStack = new List<UIView>();

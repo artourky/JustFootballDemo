@@ -22,6 +22,10 @@ public class LoadSceneCOmmand : Command
     {
         loadSceneOperation = SceneManager.LoadSceneAsync(_scenesType.ToString());
         yield return new WaitUntil(() => loadSceneOperation.isDone);
+        if (_scenesType == ScenesType.MainScene)
+        {
+            AnimationManager.Instance.StopSplashAnimation();
+        }
         IsFinished = true;
     }
 }

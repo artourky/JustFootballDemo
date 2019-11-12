@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public enum AnimationType
 {
@@ -17,8 +18,10 @@ public class AnimationManager : BaseManager<AnimationManager>
 {
     private Dictionary<GameObject, List<AnimationHandler>> AnimationList = new Dictionary<GameObject, List<AnimationHandler>>();
     public Animator transitionAnimator;
-    public Animator splashAnimation;
-    
+    public GameObject SplashAnimationGO;
+    public GameObject Character;
+    public PlayableDirector playableDirector;
+
     public override void Initialize()
     {
         IsReady = true;
@@ -57,7 +60,15 @@ public class AnimationManager : BaseManager<AnimationManager>
     }
     public void SplashAnimation()
     {
-        splashAnimation.SetBool("IsOpen",true);
+        playableDirector.Play();
+    }
+    public void StopSplashAnimation()
+    {
+        Destroy(SplashAnimationGO.gameObject);
+    }
+    public void RemoveCharacter()
+    {
+        Destroy(Character.gameObject);
     }
 
 }

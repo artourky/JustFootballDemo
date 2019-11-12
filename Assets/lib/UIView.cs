@@ -11,6 +11,7 @@ public abstract class UIView : MonoBehaviour
     public bool isLoaded;
     public virtual void Awake()
     {
+        GetComponent<Canvas>().worldCamera = Camera.main;
     }
     public virtual void RegisterDependency()
     {
