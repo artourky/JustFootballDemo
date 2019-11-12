@@ -33,6 +33,7 @@ public class ClubsView : UIView<ClubsModel, ClubsController>
     {
         base.RegisterDependency();
         Model.ListenOnPropertyChanged("ClubsList", ClubsListChanged);
+        isLoaded = true;
     }
     private void ClubsListChanged()
     {
@@ -40,13 +41,13 @@ public class ClubsView : UIView<ClubsModel, ClubsController>
         if ( Model.ClubsList.Length > 0 && clubsScroll != null)
         {
             clubsScroll.Initialize(Model.ClubsList.ToList());
-
+            LoadingAnimation.SetActive(false);
         }
         for (int i = 0; i < clubsScroll.ActiveElements.Count; i++)
         {
             HandleClubItemData(clubsScroll.ActiveElements[i]);
         }
-        isLoaded = true;
+
     }
     private void HandleClubItemData(ClubItem clubGameObject)
     {

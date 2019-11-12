@@ -8,10 +8,14 @@ using UnityEngine;
 public abstract class UIView : MonoBehaviour
 {
     public GameObject ViewGameObject;
+    public GameObject LoadingAnimation;
     public bool isLoaded;
+    public bool isDataLoadedFromServer;
+    protected int retryCount;
     public virtual void Awake()
     {
         GetComponent<Canvas>().worldCamera = Camera.main;
+        LoadingAnimation.SetActive(true);
     }
     public virtual void RegisterDependency()
     {
@@ -46,5 +50,28 @@ public abstract class UIView<M, C> : UIView
         RegisterDependency();
         Controller.Setup(Model, dataObject);
         ShowView();
+        if (!isDataLoadedFromServer)
+        {
+            StartCoroutine(RetryLoadDataFromServert());
+        }
     }
+    public IEnumerator RetryLoadDataFromServert()
+    {
+        while (retryCount < 5)
+        {
+            yield return new WaitForSeconds(15f);
+            if (isDataLoadedFromServer)
+            {
+                yield break;
+            }
+            Controller.RetryLoadData();
+            retryCount++;
+            Debug.Log("RetryLoadData ->"+this.name);
+        }
+        if (retryCount == 5)
+        {
+            // Show Toast
+        }
+    }
+    
 }

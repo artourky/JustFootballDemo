@@ -22,4 +22,9 @@ public class ClubsController : UIController<ClubsModel>
                 Events.instance.Raise( new ClubDataUpdated(ClubID) );
             } );
     }
+    public override void RetryLoadData()
+    {
+        Model.RequestClubs();
+    }
+
 }

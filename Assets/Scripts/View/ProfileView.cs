@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ProfileView : UIView<ProfileModel, ProfileContoller>
+public class ProfileView : UIView<ProfileModel, ProfileController>
 {
     public Image ProfileImage;
     public Image ClubIcon;
@@ -62,6 +62,7 @@ public class ProfileView : UIView<ProfileModel, ProfileContoller>
     {
         base.RegisterDependency();
         Model.ListenOnPropertyChanged("PlayerData", UpdateViewData);
+        isLoaded = true;
     }
 
     private void UpdateViewData()
@@ -79,7 +80,7 @@ public class ProfileView : UIView<ProfileModel, ProfileContoller>
         { return; }
         DataManager.Instance.GetSpriteByUrl(Model.PlayerData.pictureUrl, (image) => { if (ProfileImage == null) return; ProfileImage.sprite = image; });
         DataManager.Instance.GetSpriteByUrl(Model.PlayerData.clubPictureUrl, (image) => { if (ClubIcon == null) return;  ClubIcon.sprite = image; });
-        isLoaded = true;
+        LoadingAnimation.SetActive(false);
     }
 
     public void ChooseNameClicked()

@@ -11,17 +11,21 @@ public class HomeView : UIView<HomeModel, HomeController>
     {
         base.RegisterDependency();
         Model.ListenOnPropertyChanged("PlayerData", UpdateView);
+        isLoaded = true;
     }
 
     public void UpdateView()
     {
-        if(Model.playerData.pictureUrl != "")
+        if(Model.playerData != null && Model.playerData.pictureUrl != "")
         {
             DataManager.Instance.GetSpriteByUrl(Model.playerData.pictureUrl,
                 (image) => { playerImage.sprite = image; });
             playerName.text = Model.playerData.username;
         }
-        isLoaded = true;
+        if (ApiManager.Instance.IsConnected)
+        {
+            LoadingAnimation.SetActive(false);
+        }
     }
 
     public void OnClubClick()

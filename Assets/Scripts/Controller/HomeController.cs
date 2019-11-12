@@ -7,8 +7,8 @@ public class HomeController : UIController<HomeModel>
     public override void Setup(HomeModel model, object dataObject)
     {
         base.Setup(model);
-        Model.RequestProfileData();
-
+        if (!ApiManager.Instance.IsConnected) return;
+            Model.RequestProfileData();
     }
 
     public void OpenClubView()
@@ -23,6 +23,9 @@ public class HomeController : UIController<HomeModel>
     {
         ViewsManager.Instance.OpenView(ViewType.ProfileView);
     }
-
-    
+    public override void RetryLoadData()
+    {
+        if (!ApiManager.Instance.IsConnected) return;
+        Model.RequestProfileData();
+    }
 }

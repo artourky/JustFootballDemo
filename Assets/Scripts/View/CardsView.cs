@@ -13,10 +13,10 @@ public class CardsView : UIView<CardsModel,CardsController>
     {
         base.RegisterDependency();
         Model.ListenOnPropertyChanged("CardsList", CardsListChanged);
+        isLoaded = true;
     }
     private void CardsListChanged()
     {
-        Debug.Log("Cards List Count > " + Model.CardsList.Length);
         if(Model.CardsList.Length > 0 && cardsScroll != null)
         {
             cardsScroll.Initialize(Model.CardsList.ToList());
@@ -24,8 +24,8 @@ public class CardsView : UIView<CardsModel,CardsController>
             {
                 HandleClubItemData(cardsScroll.ActiveElements[ i ] );
             }
+            LoadingAnimation.SetActive(false);
         }
-        isLoaded = true;
     }
     private void HandleClubItemData( CardItem cardItem)
     {
@@ -56,6 +56,4 @@ public class CardsView : UIView<CardsModel,CardsController>
     {
         AnimationManager.Instance.AddAnimation(AnimationType.Shake, button);
     }
-
-
 }

@@ -15,5 +15,9 @@ public class CardsController : UIController<CardsModel>
        
         ViewsManager.Instance.OpenView( ViewType.ProfileView , cardID);
     }
+    public override void RetryLoadData()
+    {
+        Model.RequestCards();
+    }
 
 }

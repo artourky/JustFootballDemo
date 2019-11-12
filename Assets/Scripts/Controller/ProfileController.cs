@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Assets.Scripts;
 using UnityEngine;
 
-public class ProfileContoller : UIController<ProfileModel>
+public class ProfileController : UIController<ProfileModel>
 {
+    private string playerID;
     public override void Setup(ProfileModel model,object dataObject)
     {
         base.Setup(model);
-        string playerID = string.Empty;
+        playerID = string.Empty;
 
         if( dataObject != null )
         {
@@ -21,5 +22,9 @@ public class ProfileContoller : UIController<ProfileModel>
     public void OnChangeNameClicked(string newUserName)
     {
         ApiManager.Instance.SetUserName( new UserName( newUserName ), () => { Debug.Log( "Update Name Complete" ); } );
+    }
+    public override void RetryLoadData()
+    {
+        Model.RequestProfileData(playerID);
     }
 }

@@ -25,6 +25,10 @@ public class ApiManager : BaseManager<ApiManager>
     private UnityWebRequest request;
 
     public bool IsNewUser = true;
+    private bool finishLoadUser;
+    private bool finishLoadClubs;
+    private bool finishLoadCards;
+    public bool IsConnected;
     public override void Awake()
     {
         base.Awake();
@@ -34,26 +38,31 @@ public class ApiManager : BaseManager<ApiManager>
     public override void Initialize()
     {
         StartCoroutine(GetAuthentication());
+        IsReady = true;
     }
 
     private IEnumerator GetAuthentication()
     {
-        _deviceID = IsNewUser ? Guid.NewGuid().ToString() : _deviceID;
-        var token = new Token(_deviceID);
-        var rawBytes = Encoding.UTF8.GetBytes(token.ToJson());
-        Log("Getting authorization token using this id \"" + _deviceID + "\"");
+        while (IsConnected == false)
+        {
+            _deviceID = IsNewUser ? Guid.NewGuid().ToString() : _deviceID;
+            var token = new Token(_deviceID);
+            var rawBytes = Encoding.UTF8.GetBytes(token.ToJson());
+            Log("Getting authorization token using this id \"" + _deviceID + "\"");
 
-        request = new UnityWebRequest(_authorizationUrl, "POST");
-        request.uploadHandler = new UploadHandlerRaw(rawBytes);
-        request.downloadHandler = new DownloadHandlerBuffer();
+            request = new UnityWebRequest(_authorizationUrl, "POST");
+            request.uploadHandler = new UploadHandlerRaw(rawBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
 
-        request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Content-Type", "application/json");
 
-        yield return request.SendWebRequest();
+            yield return request.SendWebRequest();
 
-        IsReady = request.responseCode == 200L;
-        _authToken = request.downloadHandler.text;
-        Log("Calling other requests are allowed? " + IsReady);
+            IsConnected = request.responseCode == 200L;
+            _authToken = request.downloadHandler.text;
+            Log("Calling other requests are allowed? " + IsConnected);
+            yield return new WaitForSeconds(15);
+        }
     }
 
     private void SetRequestInfo(string jsonBody = "")
@@ -73,6 +82,7 @@ public class ApiManager : BaseManager<ApiManager>
     public void GetUser(UserName userName = null, Action<UserData> onComplete = null)
     {
         string playerName = userName != null ? userName.username : "";
+        if (finishLoadUser) StopCoroutine(GetUser(playerName, onComplete));
         StartCoroutine(GetUser(playerName, onComplete));
     }
 
@@ -89,11 +99,13 @@ public class ApiManager : BaseManager<ApiManager>
     public void GetClubs(Club club = null, Action<ClubsData.ClubData[]> onComplete = null)
     {
         string clubName = club != null ? club.club : "" ;
+        if (finishLoadClubs) StopCoroutine(GetClubs(clubName, onComplete));
         StartCoroutine(GetClubs(clubName, onComplete));
     }
 
     public void GetCardss(Action<CardsData.CardData[]> onComplete = null)
     {
+        if (finishLoadCards) StopCoroutine(GetCards(onComplete));
         StartCoroutine(GetCards(onComplete));
     }
 
