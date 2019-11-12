@@ -11,15 +11,17 @@ public class ProfileView : UIView<ProfileModel, ProfileContoller>
     public Text ClubeName;
     public Text ClubeLeague;
     public Button ChangeNameButton;
+    public Button SaveButton;
     public InputField UserNameInputField;
-    private TouchScreenKeyboard touchScreenKeyboard;
+    public Image SettingIcon;
+    
     private bool _isMyProfile;
     public bool IsMyProfile
     {
         set
         {
             _isMyProfile = value;
-            ChangeNameButton.interactable = _isMyProfile;
+            UpdateProfileSettings();
         }
 
         get => _isMyProfile;
@@ -42,25 +44,26 @@ public class ProfileView : UIView<ProfileModel, ProfileContoller>
     {
         UserNameInputField.gameObject.SetActive(_isEditMode);
         ChangeNameButton.gameObject.SetActive(!_isEditMode);
-        if( IsEditMode )
+        SettingIcon.gameObject.SetActive( !IsEditMode );
+        SaveButton.gameObject.SetActive( _isEditMode );
+        if (IsEditMode)
         {
-            touchScreenKeyboard=TouchScreenKeyboard.Open( ProfileName.text );
+            TouchScreenKeyboard.Open(ProfileName.text);
         }
     }
 
-    private void Update()
+    private void UpdateProfileSettings()
     {
-        if ((Input.GetKeyDown(KeyCode.Return) && IsEditMode) || (touchScreenKeyboard != null && touchScreenKeyboard.status == TouchScreenKeyboard.Status.Done))
-        {
-            UserNameSubmited();
-        }
-
+        ChangeNameButton.interactable = _isMyProfile;
+        SettingIcon.gameObject.SetActive(IsMyProfile);
     }
+
     public override void RegisterDependency()
     {
         base.RegisterDependency();
         Model.ListenOnPropertyChanged("PlayerData", UpdateViewData);
     }
+
     private void UpdateViewData()
     {
         if (Model.PlayerData == null)
@@ -78,6 +81,7 @@ public class ProfileView : UIView<ProfileModel, ProfileContoller>
         DataManager.Instance.GetSpriteByUrl(Model.PlayerData.clubPictureUrl, (image) => { if (ClubIcon == null) return;  ClubIcon.sprite = image; });
         isLoaded = true;
     }
+
     public void ChooseNameClicked()
     {
         IsEditMode = !IsEditMode;

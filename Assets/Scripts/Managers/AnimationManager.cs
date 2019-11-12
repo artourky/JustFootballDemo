@@ -18,9 +18,9 @@ public class AnimationManager : BaseManager<AnimationManager>
 {
     private Dictionary<GameObject, List<AnimationHandler>> AnimationList = new Dictionary<GameObject, List<AnimationHandler>>();
     public Animator transitionAnimator;
-    public GameObject SplashAnimationGO;
-    public GameObject Character;
-    public PlayableDirector playableDirector;
+    public Animator SplashAnimationGO;
+
+
 
     public override void Initialize()
     {
@@ -60,15 +60,10 @@ public class AnimationManager : BaseManager<AnimationManager>
     }
     public void SplashAnimation()
     {
-        playableDirector.Play();
+        SplashAnimationGO.SetBool("IsOpen", true);
     }
     public void StopSplashAnimation()
     {
-        Destroy(SplashAnimationGO.gameObject);
+       SplashAnimationGO.gameObject.SetActive( false );
     }
-    public void RemoveCharacter()
-    {
-        Destroy(Character.gameObject);
-    }
-
 }

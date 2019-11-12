@@ -31,14 +31,12 @@ public class TransitionAnimationCommand : Command
         if (_animationType == AnimationType.SplashScene)
         {
             AnimationManager.Instance.SplashAnimation();
-            yield return new WaitUntil(()=>AnimationManager.Instance.playableDirector.state != UnityEngine.Playables.PlayState.Playing);
-            AnimationManager.Instance.RemoveCharacter();
         }
         if (_animationType == AnimationType.Transition)
         {
             AnimationManager.Instance.TransitionAnimation(_open);
-            yield return new WaitForSeconds(1f);
         }
+        yield return new WaitForSeconds(2f);
         IsFinished = true;
     }
 }

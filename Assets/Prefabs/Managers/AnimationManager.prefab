@@ -154,7 +154,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.48388058, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 714, y: -4}
+  m_AnchoredPosition: {x: 1948, y: -4}
   m_SizeDelta: {x: 49.02002, y: 48.200012}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1774791692696111782
@@ -227,7 +227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.48388058, y: 1}
-  m_AnchoredPosition: {x: -709, y: -4}
+  m_AnchoredPosition: {x: -1869, y: -4}
   m_SizeDelta: {x: 87.02002, y: 48.200012}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1774791693478114466
@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionAnimator: {fileID: 1774791692675750398}
-  splashAnimation: {fileID: 7631265517733619196}
+  SplashAnimationGO: {fileID: 7631265517733619196}
 --- !u!1 &2728216146596719556
 GameObject:
   m_ObjectHideFlags: 0

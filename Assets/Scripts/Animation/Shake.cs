@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Shake : AnimationBehaviour
 {
-    public float shake_speed = 10;
-    public float shake_intensity = 5;
-    public float amountOverTime = 1;
+    public float shake_speed = 15;
+    public float shake_intensity = 10;
+    public float amountOverTime = 8;
 
     public Vector3 originPosition;
 
