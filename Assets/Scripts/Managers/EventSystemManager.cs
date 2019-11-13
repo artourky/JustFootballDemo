@@ -91,3 +91,13 @@ public class ClubDataUpdated : GameEvent
         ClubName = clubName;
     }
 }
+
+public class ProfileNameUpdated : GameEvent
+{
+    public string ProfileName;
+
+    public ProfileNameUpdated( string newProfileName )
+    {
+        ProfileName = newProfileName;
+    }
+}

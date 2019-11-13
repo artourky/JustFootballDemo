@@ -21,7 +21,12 @@ public class ProfileController : UIController<ProfileModel>
 
     public void OnChangeNameClicked(string newUserName)
     {
-        ApiManager.Instance.SetUserName( new UserName( newUserName ), () => { Debug.Log( "Update Name Complete" ); } );
+        ApiManager.Instance.SetUserName( new UserName( newUserName ),
+            () =>
+            {
+                Debug.Log( "Update Name Complete" );
+                Events.instance.Raise(new ProfileNameUpdated(newUserName) );
+            } );
     }
     public override void RetryLoadData()
     {
