@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 public abstract class UIView : MonoBehaviour
-{
+{ 
     public GameObject ViewGameObject;
     public GameObject LoadingAnimation;
     public bool isLoaded;
