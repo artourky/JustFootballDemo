@@ -6,6 +6,18 @@ using UnityEngine;
 public class HomeModel : UIModel
 {
     public UserData playerData;
+
+    public HomeModel()
+    {
+        Events.instance.AddListener<ProfileNameUpdated>(OnProfileNameUpdated);
+    }
+
+    private void OnProfileNameUpdated(ProfileNameUpdated e)
+    {
+        playerData.username = e.ProfileName;
+        NotifyOnPropertyChanged("PlayerData");
+    }
+
     public void RequestProfileData()
     {
         ApiManager.Instance.GetUser(null, OnGetUserData);
@@ -17,4 +29,8 @@ public class HomeModel : UIModel
         NotifyOnPropertyChanged("PlayerData");
     }
 
+    ~HomeModel()
+    {
+        Events.instance.RemoveListener<ProfileNameUpdated>(OnProfileNameUpdated);
+    }
 }
